@@ -35,10 +35,17 @@ const styles = StyleSheet.create({
     },
     card: {
         padding: 10,
+        paddingTop: 20,
         width: "80%",
         alignItems: "center",
         justifyContent: "space-between",
-        backgroundColor: "#faeee7"
+        backgroundColor: "#faeee7",
+        shadowColor: "#594a4e",
+        shadowOffset: { width: 0, height: 2 },
+        shadowRadius: 4,
+        shadowOpacity: 0.35,
+        elevation: 5,
+        borderRadius: 5
     },
     cardHeader: {
         color: "#594a4e",
