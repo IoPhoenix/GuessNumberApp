@@ -5,7 +5,8 @@ import {
     View,
     Button,
     TouchableWithoutFeedback,
-    Keyboard // API
+    Keyboard, // API
+    Alert
 } from "react-native";
 import Card from "../components/Card";
 import Input from "../components/Input";
@@ -13,8 +14,38 @@ import Colors from "../constants/colors";
 
 const StartGameScreen = props => {
     const [value, setValue] = React.useState("");
+    const [confirmed, setConfirmed] = React.useState(false);
+    const [number, setNumber] = React.useState(undefined);
 
     const handleInput = userInput => setValue(userInput.replace(/[^0-9]/g, ""));
+
+    const resetInput = () => {
+        setValue("");
+        setConfirmed(false);
+    };
+
+    const confirmInput = () => {
+        const chosenNumber = parseInt(value);
+
+        if (isNaN(chosenNumber) || chosenNumber <= 0 || chosenNumber > 100) {
+            Alert.alert("Invalid number", "Number must be between 1 and 99", [
+                { text: "Ok", style: "destructive", onPress: resetInput }
+            ]);
+            return;
+        }
+        setConfirmed(true);
+        setValue(""); // will be queued for next re-render
+        setNumber(parseInt(value));
+    };
+
+    let confirmedOutput;
+
+    if (confirmed) {
+        confirmedOutput = (
+            <Text style={styles.confirmation}>Chosen Number: {number}</Text>
+        );
+    }
+
     return (
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
             <View style={styles.screen}>
@@ -36,18 +67,19 @@ const StartGameScreen = props => {
                             <Button
                                 color={Colors.primary}
                                 title="Confirm"
-                                onPress={() => {}}
+                                onPress={confirmInput}
                             />
                         </View>
                         <View style={styles.button}>
                             <Button
                                 color={Colors.paragraph}
                                 title="Reset"
-                                onPress={() => {}}
+                                onPress={resetInput}
                             />
                         </View>
                     </View>
                 </Card>
+                {confirmedOutput}
             </View>
         </TouchableWithoutFeedback>
     );
